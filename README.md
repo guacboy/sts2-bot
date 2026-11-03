@@ -7,8 +7,8 @@ Training runs in two stages: imitation learning first, then PPO. The initial sco
 ## Status
 
 - [x] Warmup: GPT-style transformer and char-level training loop
-- [ ] divine-sts2 setup (bootstrap + `doctor`)
-- [ ] Inspect real observations with random legal actions
+- [x] divine-sts2 setup (bootstrap + `doctor`)
+- [x] Inspect real observations with random legal actions
 - [ ] State tokenizer, action head with legal action masking
 - [ ] Imitation learning
 - [ ] PPO fine tuning
@@ -26,12 +26,31 @@ pip install -e .[dev]
 git config core.hooksPath .githooks   # enables the pytest pre-push gate
 ```
 
+### Game environment (divine-sts2)
+
+divine-sts2 is cloned into `external/` (git ignored). Its workers run the game headless through Godot 4.5.1 .NET, and its scripts download .NET 9 and Godot into `external/divine-sts2/.tools/` without a system install. The scripts work in Windows PowerShell 5.1.
+
+```powershell
+git clone https://github.com/favet/divine-sts2 external/divine-sts2
+$d = "external\divine-sts2"
+powershell -ExecutionPolicy Bypass -File $d\scripts\install-dotnet-9.ps1
+powershell -ExecutionPolicy Bypass -File $d\scripts\install-godot-4.5.1.ps1
+# Godot loads the Debug assembly when running from source, so build both configurations
+powershell -ExecutionPolicy Bypass -File $d\scripts\build-persistent-server.ps1 -Configuration Release
+powershell -ExecutionPolicy Bypass -File $d\scripts\build-persistent-server.ps1 -Configuration Debug
+pip install -e $d
+cd $d; python -m sts2_native_sim.cli doctor --deep --json   # expect "ok": true
+```
+
+The game is auto detected from Steam. Set `STS2_GAME_ROOT` in `.env` for a custom library path. The upstream `bootstrap.ps1` does the same steps, but also installs ruff and mypy.
+
 ## Layout
 
 | Path | Purpose |
 | --- | --- |
 | `src/sts2bot/model.py` | GPT model (pre-norm blocks, optional non-causal attention, `hidden()` for future policy/value heads) |
 | `src/sts2bot/warmup.py` | Char-level training loop with TensorBoard logging |
+| `scripts/inspect_env.py` | Plays random legal actions, dumps observations to `data/inspect/`, reports win rate |
 | `tests/` | Pytest suite, run by the pre-push hook |
 | `.githooks/pre-push` | Blocks pushes when tests fail |
 
@@ -50,6 +69,25 @@ python -m sts2bot.warmup --data data/input.txt --block-size 256 --n-layer 6 --n-
 ```
 
 View the training curves with `tensorboard --logdir runs`. Checkpoints go to `checkpoints/`.
+
+## Environment findings
+
+Run `python scripts/inspect_env.py --encounter NIBBITS_NORMAL --episodes 20` to reproduce.
+
+- The default scenario is Ironclad with the starter deck (5 Strike, 4 Defend, Bash) and 80 HP. `encounter: "first"` resolves to the Bygone Effigy elite.
+- Action IDs are strings tied to card instances (`play:strike-2:target:1`, `end_turn`), so the policy scores each legal action instead of predicting from a fixed vocabulary.
+- The first decision of a combat comes before the opening draw, with only `end_turn` legal.
+- The env does not auto reset finished workers, and it never truncates.
+- Built-in reward: enemy HP removed + 1.5 x player HP change, +100 on victory, -50 on defeat.
+
+Random bot win rate over 20 games (starter deck, ascension 0):
+
+| Encounter group | Random win rate |
+| --- | --- |
+| Act 1 weak (Nibbits, Slimes, Toadpoles, ...) | 75% to 100% |
+| Act 1 normal, most (Nibbits, Slimes, Cultists, Two Tailed Rats, ...) | 0% to 10% |
+| Act 1 normal, easier (Inklets, Punch Construct, Mawler, Haunted Ship) | 30% to 60% |
+| Act 1 elites | 0% |
 
 ## Tests
 

@@ -6,3 +6,4 @@ runs/
 checkpoints/
 data/
 .env
+external/
