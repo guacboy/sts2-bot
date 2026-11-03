@@ -1,0 +1,11 @@
+#!/bin/sh
+# Pre-push gate: block the push if the test suite fails.
+if [ -x .venv/Scripts/python.exe ]; then
+  PY=.venv/Scripts/python.exe
+else
+  PY=.venv/bin/python
+fi
+"$PY" -m pytest -q || {
+  echo "pre-push: tests failed, push aborted." >&2
+  exit 1
+}
