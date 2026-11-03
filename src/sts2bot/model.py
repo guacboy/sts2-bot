@@ -29,13 +29,16 @@ class SelfAttention(nn.Module):
         self.proj = nn.Linear(cfg.n_embd, cfg.n_embd)
         self.resid_drop = nn.Dropout(cfg.dropout)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, pad_mask: torch.Tensor | None = None) -> torch.Tensor:
+        """pad_mask: optional (B, T) bool, True for real tokens. Only supported without causal masking."""
         B, T, C = x.shape
+        assert not (self.causal and pad_mask is not None), "pad_mask requires causal=False"
         q, k, v = self.qkv(x).split(C, dim=2)
         # (B, T, C) -> (B, n_head, T, head_dim)
         q, k, v = (t.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) for t in (q, k, v))
         y = F.scaled_dot_product_attention(
             q, k, v,
+            attn_mask=None if pad_mask is None else pad_mask[:, None, None, :],
             dropout_p=self.dropout if self.training else 0.0,
             is_causal=self.causal,
         )
@@ -67,8 +70,8 @@ class Block(nn.Module):
         self.ln2 = nn.LayerNorm(cfg.n_embd)
         self.mlp = MLP(cfg)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x + self.attn(self.ln1(x))
+    def forward(self, x: torch.Tensor, pad_mask: torch.Tensor | None = None) -> torch.Tensor:
+        x = x + self.attn(self.ln1(x), pad_mask)
         return x + self.mlp(self.ln2(x))
 
 

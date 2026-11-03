@@ -9,10 +9,10 @@ Training runs in two stages: imitation learning first, then PPO. The initial sco
 - [x] Warmup: GPT-style transformer and char-level training loop
 - [x] divine-sts2 setup (bootstrap + `doctor`)
 - [x] Inspect real observations with random legal actions
-- [ ] State tokenizer, action head with legal action masking
+- [x] State tokenizer, action head with legal action masking
 - [ ] Imitation learning
 - [ ] PPO fine tuning
-- [ ] Milestone: beat an Act 1 fight more often than a random bot
+- [ ] Milestone: win NIBBITS_NORMAL more often than a random bot (random wins 0% of 20 games)
 
 ## Setup
 
@@ -50,6 +50,9 @@ The game is auto detected from Steam. Set `STS2_GAME_ROOT` in `.env` for a custo
 | --- | --- |
 | `src/sts2bot/model.py` | GPT model (pre-norm blocks, optional non-causal attention, `hidden()` for future policy/value heads) |
 | `src/sts2bot/warmup.py` | Char-level training loop with TensorBoard logging |
+| `src/sts2bot/encoding.py` | Observation tokenizer (`encode`), growing `Vocab`, padded batching (`collate`) |
+| `src/sts2bot/policy.py` | `CombatPolicy`: non-causal transformer that scores each legal action, plus a value head |
+| `src/sts2bot/evaluate.py` | Plays real combats with a random bot or a policy, reports win rate and HP kept |
 | `scripts/inspect_env.py` | Plays random legal actions, dumps observations to `data/inspect/`, reports win rate |
 | `tests/` | Pytest suite, run by the pre-push hook |
 | `.githooks/pre-push` | Blocks pushes when tests fail |
@@ -88,6 +91,24 @@ Random bot win rate over 20 games (starter deck, ascension 0):
 | Act 1 normal, most (Nibbits, Slimes, Cultists, Two Tailed Rats, ...) | 0% to 10% |
 | Act 1 normal, easier (Inklets, Punch Construct, Mawler, Haunted Ship) | 30% to 60% |
 | Act 1 elites | 0% |
+
+## Combat policy
+
+Each observation becomes a set of tokens. Every token sums four embeddings:
+
+- **kind**: global state, player, enemy, intent, power, a card in hand/draw/discard/exhaust, relic, potion, or legal action
+- **ids**: up to two categorical ids from a shared `Vocab` (card or monster `model_id`, action kind, intent type and move)
+- **slot**: the creature a token refers to (0 none, 1 player, 2 and up for enemies), which links powers, intents, and attack targets to their creature
+- **features**: six scaled numbers (HP, block, energy cost, intent damage, ...)
+
+There are no positional embeddings, so token order does not affect the output. Each legal action is its own token, and the policy head scores only those tokens. Illegal moves get no logit at all, so masking happens by construction. The value head reads the global token.
+
+Compare a random bot with an untrained (or trained) policy on real combats:
+
+```powershell
+python -m sts2bot.evaluate --encounter NIBBITS_NORMAL --episodes 20
+python -m sts2bot.evaluate --checkpoint checkpoints/policy.pt
+```
 
 ## Tests
 

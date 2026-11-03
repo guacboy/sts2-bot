@@ -1,0 +1,417 @@
+{
+ "obs": {
+  "schema_version": 2,
+  "game_build": {
+   "version": "0.1.0+59260271157f76a2896f0eab5bc6ea1245d8b314",
+   "assembly_sha256": "A1F9E653F1E28E4076558FEE1E60D218619CB7E057B887C6417F62C62C6D7A52",
+   "pck_sha256": "42520EB8B0911C6C0F0BD102D92B33F41ABD4D26B83489817D0A6DBD7DD48587"
+  },
+  "run": {
+   "ascension": 0,
+   "gold": 99,
+   "deck": [],
+   "relics": [],
+   "potions": [],
+   "seed": "MASKED",
+   "rng_counters": {}
+  },
+  "combat": {
+   "turn": 2,
+   "phase": "Play",
+   "energy": 1,
+   "max_energy": 3,
+   "stars": 0,
+   "creatures": [
+    {
+     "combat_id": 0,
+     "model_id": "IRONCLAD",
+     "side": "Player",
+     "hp": 74,
+     "max_hp": 80,
+     "block": 5,
+     "alive": true,
+     "powers": []
+    },
+    {
+     "combat_id": 1,
+     "model_id": "NIBBIT",
+     "side": "Enemy",
+     "hp": 46,
+     "max_hp": 46,
+     "block": 5,
+     "alive": true,
+     "next_move": {
+      "id": "HISS_MOVE",
+      "intents": [
+       {
+        "intent_type": "Buff",
+        "implementation": "BuffIntent"
+       }
+      ]
+     },
+     "powers": []
+    },
+    {
+     "combat_id": 2,
+     "model_id": "NIBBIT",
+     "side": "Enemy",
+     "hp": 38,
+     "max_hp": 44,
+     "block": 0,
+     "alive": true,
+     "next_move": {
+      "id": "BUTT_MOVE",
+      "intents": [
+       {
+        "intent_type": "Attack",
+        "implementation": "SingleAttackIntent",
+        "damage": 14,
+        "repeats": 1
+       }
+      ]
+     },
+     "powers": [
+      {
+       "model_id": "STRENGTH_POWER",
+       "amount": 2
+      }
+     ]
+    }
+   ],
+   "orbs": {
+    "capacity": 0,
+    "entries": []
+   },
+   "piles": [
+    {
+     "name": "Hand",
+     "type": "Hand",
+     "cards": [
+      {
+       "instance_id": "strike-3",
+       "net_id": 1,
+       "model_id": "STRIKE_IRONCLAD",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "native_state": {}
+      },
+      {
+       "instance_id": "defend-3",
+       "net_id": 2,
+       "model_id": "DEFEND_IRONCLAD",
+       "card_type": "Skill",
+       "target_type": "Self",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "native_state": {}
+      },
+      {
+       "instance_id": "defend-0",
+       "net_id": 3,
+       "model_id": "DEFEND_IRONCLAD",
+       "card_type": "Skill",
+       "target_type": "Self",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "native_state": {}
+      }
+     ]
+    },
+    {
+     "name": "DrawPile",
+     "type": "Draw",
+     "count": 5,
+     "histogram": {
+      "STRIKE_IRONCLAD": 3,
+      "DEFEND_IRONCLAD": 1,
+      "BASH": 1
+     },
+     "cards_unordered": [
+      {
+       "model_id": "BASH",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 2,
+       "costs_x": false,
+       "upgrades": 0,
+       "enchantment": null,
+       "rarity": null,
+       "cost_modified": null,
+       "is_locked": null,
+       "native_state": {}
+      },
+      {
+       "model_id": "DEFEND_IRONCLAD",
+       "card_type": "Skill",
+       "target_type": "Self",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "enchantment": null,
+       "rarity": null,
+       "cost_modified": null,
+       "is_locked": null,
+       "native_state": {}
+      },
+      {
+       "model_id": "STRIKE_IRONCLAD",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "enchantment": null,
+       "rarity": null,
+       "cost_modified": null,
+       "is_locked": null,
+       "native_state": {}
+      },
+      {
+       "model_id": "STRIKE_IRONCLAD",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "enchantment": null,
+       "rarity": null,
+       "cost_modified": null,
+       "is_locked": null,
+       "native_state": {}
+      },
+      {
+       "model_id": "STRIKE_IRONCLAD",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "enchantment": null,
+       "rarity": null,
+       "cost_modified": null,
+       "is_locked": null,
+       "native_state": {}
+      }
+     ]
+    },
+    {
+     "name": "DiscardPile",
+     "type": "Discard",
+     "cards": [
+      {
+       "instance_id": "strike-1",
+       "net_id": 4,
+       "model_id": "STRIKE_IRONCLAD",
+       "card_type": "Attack",
+       "target_type": "AnyEnemy",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "native_state": {}
+      },
+      {
+       "instance_id": "defend-2",
+       "net_id": 0,
+       "model_id": "DEFEND_IRONCLAD",
+       "card_type": "Skill",
+       "target_type": "Self",
+       "energy_cost": 1,
+       "costs_x": false,
+       "upgrades": 0,
+       "native_state": {}
+      }
+     ]
+    },
+    {
+     "name": "ExhaustPile",
+     "type": "Exhaust",
+     "cards": []
+    },
+    {
+     "name": "PlayPile",
+     "type": "Play",
+     "cards": []
+    }
+   ],
+   "draw_pile_summary": {
+    "count": 5,
+    "histogram": {
+     "STRIKE_IRONCLAD": 3,
+     "DEFEND_IRONCLAD": 1,
+     "BASH": 1
+    },
+    "cards_unordered": [
+     {
+      "model_id": "BASH",
+      "card_type": "Attack",
+      "target_type": "AnyEnemy",
+      "energy_cost": 2,
+      "costs_x": false,
+      "upgrades": 0,
+      "enchantment": null,
+      "rarity": null,
+      "cost_modified": null,
+      "is_locked": null,
+      "native_state": {}
+     },
+     {
+      "model_id": "DEFEND_IRONCLAD",
+      "card_type": "Skill",
+      "target_type": "Self",
+      "energy_cost": 1,
+      "costs_x": false,
+      "upgrades": 0,
+      "enchantment": null,
+      "rarity": null,
+      "cost_modified": null,
+      "is_locked": null,
+      "native_state": {}
+     },
+     {
+      "model_id": "STRIKE_IRONCLAD",
+      "card_type": "Attack",
+      "target_type": "AnyEnemy",
+      "energy_cost": 1,
+      "costs_x": false,
+      "upgrades": 0,
+      "enchantment": null,
+      "rarity": null,
+      "cost_modified": null,
+      "is_locked": null,
+      "native_state": {}
+     },
+     {
+      "model_id": "STRIKE_IRONCLAD",
+      "card_type": "Attack",
+      "target_type": "AnyEnemy",
+      "energy_cost": 1,
+      "costs_x": false,
+      "upgrades": 0,
+      "enchantment": null,
+      "rarity": null,
+      "cost_modified": null,
+      "is_locked": null,
+      "native_state": {}
+     },
+     {
+      "model_id": "STRIKE_IRONCLAD",
+      "card_type": "Attack",
+      "target_type": "AnyEnemy",
+      "energy_cost": 1,
+      "costs_x": false,
+      "upgrades": 0,
+      "enchantment": null,
+      "rarity": null,
+      "cost_modified": null,
+      "is_locked": null,
+      "native_state": {}
+     }
+    ]
+   }
+  },
+  "decision": {
+   "kind": "combat_action",
+   "legal_actions": [
+    {
+     "action_id": "play:strike-3:target:1",
+     "kind": "play_card",
+     "parameters": {
+      "instance_id": "strike-3",
+      "card_id": 1,
+      "target_id": 1
+     }
+    },
+    {
+     "action_id": "play:strike-3:target:2",
+     "kind": "play_card",
+     "parameters": {
+      "instance_id": "strike-3",
+      "card_id": 1,
+      "target_id": 2
+     }
+    },
+    {
+     "action_id": "play:defend-3:none",
+     "kind": "play_card",
+     "parameters": {
+      "instance_id": "defend-3",
+      "card_id": 2,
+      "target_id": null
+     }
+    },
+    {
+     "action_id": "play:defend-0:none",
+     "kind": "play_card",
+     "parameters": {
+      "instance_id": "defend-0",
+      "card_id": 3,
+      "target_id": null
+     }
+    },
+    {
+     "action_id": "end_turn",
+     "kind": "end_turn",
+     "parameters": {}
+    }
+   ]
+  },
+  "inventory": {
+   "relics": [],
+   "potions": [
+    null,
+    null,
+    null
+   ]
+  },
+  "terminal": false,
+  "victory": false
+ },
+ "legal_actions": [
+  {
+   "action_id": "play:strike-3:target:1",
+   "kind": "play_card",
+   "parameters": {
+    "instance_id": "strike-3",
+    "card_id": 1,
+    "target_id": 1
+   }
+  },
+  {
+   "action_id": "play:strike-3:target:2",
+   "kind": "play_card",
+   "parameters": {
+    "instance_id": "strike-3",
+    "card_id": 1,
+    "target_id": 2
+   }
+  },
+  {
+   "action_id": "play:defend-3:none",
+   "kind": "play_card",
+   "parameters": {
+    "instance_id": "defend-3",
+    "card_id": 2,
+    "target_id": null
+   }
+  },
+  {
+   "action_id": "play:defend-0:none",
+   "kind": "play_card",
+   "parameters": {
+    "instance_id": "defend-0",
+    "card_id": 3,
+    "target_id": null
+   }
+  },
+  {
+   "action_id": "end_turn",
+   "kind": "end_turn",
+   "parameters": {}
+  }
+ ]
+}
